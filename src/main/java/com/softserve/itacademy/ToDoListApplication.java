@@ -35,6 +35,8 @@ public class ToDoListApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Running Spring Boot Application");
 
+
+
         Role role = roleRepository.getOne(2L);
         User validUser  = new User();
         validUser.setEmail("valid@cv.edu.ua");
@@ -53,6 +55,8 @@ public class ToDoListApplication implements CommandLineRunner {
         LocalDate localDate = toDo.getCreatedAt().toLocalDate();
         LocalDate today = LocalDate.now();
         System.out.println(localDate.equals(today));
+
+
 
     }
 }
