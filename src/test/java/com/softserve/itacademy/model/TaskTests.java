@@ -12,7 +12,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +28,13 @@ public class TaskTests {
     static void init() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
         validToDoForTask = new ToDo(
-                101l,
+                101L,
                 "todo#1",
                 LocalDateTime.now(),
                 new User(),
-                new ArrayList<Task>(),
-                new ArrayList<User>());
-        validStateForTask = new State(111l, "state", new ArrayList<Task>());
+                new ArrayList<>(),
+                new ArrayList<>());
+        validStateForTask = new State(111L, "state", new ArrayList<>());
     }
 
     @Test
@@ -68,7 +69,7 @@ public class TaskTests {
 
     @ParameterizedTest
     @MethodSource("provideInvalidName")
-    void constraint_TitleNotBlank(String title, int violationsCount) {
+    void constraint_NameNotBlank(String title, int violationsCount) {
         Task invalidNameTask = new Task();
         invalidNameTask.setName(title);
         invalidNameTask.setTodo(validToDoForTask);
@@ -102,6 +103,7 @@ public class TaskTests {
     @Test
     void testSettersAndGetters() {
         Task task = new Task();
+        Assertions.assertNull(task.getId());
 
         String name = "task#2";
         Assertions.assertDoesNotThrow(() -> task.setName(name));
@@ -115,6 +117,28 @@ public class TaskTests {
 
         Assertions.assertDoesNotThrow(() -> task.setState(validStateForTask));
         Assertions.assertEquals(validStateForTask, task.getState());
+    }
+
+    @Test
+    void testEqualsHashcodeToString() {
+        Task task1 = new Task(1L, "CODE", Priority.HIGH, validToDoForTask, validStateForTask);
+        Task task2 = new Task(1L, "CODE", Priority.HIGH, validToDoForTask, validStateForTask);
+
+        Task task3 = new Task(2L, "TEST", Priority.HIGH, validToDoForTask, validStateForTask);
+
+        Assertions.assertEquals(task1, task1);
+        Assertions.assertEquals(task1, task2);
+        Assertions.assertEquals(task1.hashCode(), task2.hashCode());
+        Assertions.assertEquals(task1.toString(), task2.toString());
+//
+        Assertions.assertNotEquals(task1, task3);
+//        Assertions.assertNotEquals(state4, state1);
+        Assertions.assertNotEquals(task1, null);
+        Assertions.assertNotEquals(task1, new Object());
+//        Assertions.assertNotEquals(task1.hashCode(), task3.hashCode());
+//        Assertions.assertNotEquals(state1.hashCode(), state4.hashCode());
+
+        Assertions.assertNotEquals(task1.toString(), task3.toString());
     }
 
 }

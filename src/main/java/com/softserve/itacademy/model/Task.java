@@ -33,6 +33,7 @@ public class Task {
 
 	@Column(nullable = false)
 	@Size(min = 3, max = 200)
+	@NotNull(message = "Task name cannot be null")
 	private String name;
 
 	@Enumerated(EnumType.STRING)
