@@ -41,7 +41,6 @@ public class UserTests {
         user.setRole(trainee);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
         assertEquals(0, violations.size());
     }
 
@@ -50,9 +49,9 @@ public class UserTests {
     void constraint_InvalidId(Long id) {
         User user = new User(
                 id,
+                "valid@email.com",
                 "Valid-FirstName",
                 "Valid-LastName",
-                "valid@email.com",
                 "V@LiDPa$$w0RD",
                 trainee,
                 null,
@@ -60,7 +59,6 @@ public class UserTests {
         user.setRole(trainee);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
         assertEquals(1L, violations.size());
     }
     private static Stream<Arguments> provideInvalidId(){
@@ -102,7 +100,6 @@ public class UserTests {
         user.setRole(trainee);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
         assertEquals(violationCount, violations.size());
     }
     private static Stream<Arguments> provideInvalidFirstNameUser(){
@@ -126,7 +123,6 @@ public class UserTests {
         user.setRole(trainee);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
         assertEquals(violationCount, violations.size());
     }
     private static Stream<Arguments> provideInvalidLastNameUser(){
@@ -150,7 +146,6 @@ public class UserTests {
         user.setRole(trainee);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
         assertEquals(violationsCount, violations.size());
     }
     private static Stream<Arguments> provideInvalidPassword(){
@@ -174,8 +169,7 @@ public class UserTests {
                 null,
                 null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        violations.forEach(System.out::println);
-        assertEquals(7, violations.size());
+        assertEquals(5, violations.size());
     }
 
     @Test

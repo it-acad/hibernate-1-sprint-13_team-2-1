@@ -54,6 +54,7 @@ public class User  {
 
     @Column(nullable = false)
     @Size(min = 6, max = 255, message = "Password length must be between 6 and 255 chars")
+    @NotNull(message = "Password cannot be null")
     private String password;
 
     @ToString.Exclude
