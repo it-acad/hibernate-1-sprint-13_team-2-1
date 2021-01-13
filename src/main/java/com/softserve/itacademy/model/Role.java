@@ -1,20 +1,29 @@
 package com.softserve.itacademy.model;
 
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", uniqueConstraints = @UniqueConstraint(columnNames = "name", name = "UQ_role_name"))
 public class Role {
 
+    @Setter(AccessLevel.NONE)
     @Id
-    @GeneratedValue(generator = "sequence-generator")
+    @GeneratedValue(generator = "role-sequence-generator")
     @GenericGenerator(
-            name = "sequence-generator",
+            name = "role-sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
                     @Parameter(name = "sequence_name", value = "role_sequence"),
@@ -22,44 +31,19 @@ public class Role {
                     @Parameter(name = "increment_size", value = "1")
             }
     )
-    private long id;
+    @Positive(message = "Role id must be positive") // or zero when not persisted
+    private Long id;
 
-    @NotBlank(message = "The roleName cannot be empty")
-    @Column(nullable = false, unique = true)
+    @EqualsAndHashCode.Include
+    @Column(nullable = false)
+    @NaturalId
+    @NotBlank(message = "Role's name cannot be blank")
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private List<User> users;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
 
-    public Role() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "Role {" +
-                "id = " + id +
-                ", name = '" + name + '\'' +
-                "} ";
-    }
 
 }
+
