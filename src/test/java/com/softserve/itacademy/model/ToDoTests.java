@@ -156,6 +156,7 @@ public class ToDoTests {
 				Collections.emptyList(),
 				Collections.emptyList());
 
+		Assertions.assertEquals(todo1, todo1);
 		Assertions.assertEquals(todo1, todo2);
 		Assertions.assertEquals(todo1.hashCode(), todo2.hashCode());
 		Assertions.assertEquals(todo1.toString(), todo2.toString());
